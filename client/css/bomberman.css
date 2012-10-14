@@ -1,0 +1,52 @@
+@CHARSET "UTF-8";
+
+#localMessages {
+	background-color: #afa;
+}
+
+#serverMessages {
+	background-color: #faa;
+}
+
+#table {
+	width: 615px;
+	overflow: hidden;
+	border-right: solid 1px #000;
+	border-bottom: solid 1px #000;
+}
+
+#table div {
+	border-left: solid 1px #000;
+	border-top: solid 1px #000;
+	float: left;
+	width: 40px;
+	height: 40px;
+}
+
+.color0 {
+	background-color: red;
+}
+
+.color1 {
+	background-color: green;
+}
+
+.color2 {
+	background-color: blue;
+}
+
+.color3 {
+	background-color: yellow;
+}
+
+.color4 {
+	background-color: magenta;
+}
+
+.color5 {
+	background-color: cyan;
+}
+
+.color6 {
+	background-color: lime;
+}

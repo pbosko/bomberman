@@ -3,60 +3,16 @@
 <head>
 	<meta charset="utf-8">
 	<title>Dyna Bomberman test</title>
-	<style>
-		#localMessages {
-			background-color: #afa;
-		}
-		#serverMessages {
-			background-color: #faa;
-		}
-	</style>
+	<link rel="stylesheet" href="/css/bomberman.css">
 </head>
 <body>
 	<h1>Dyna Bomberman test</h1>
+	<section id="bomberman"></section>
 	<section id="localMessages"></section>
 	<section id="serverMessages"></section>
-
 	<script src="/js/jquery-1.8.2.min.js"></script>
 	<script src="/js/socket.io.js"></script>
-	<script>
-		var socket = io.connect('http://localhost:2000');
-		socket.emit('name', { name: prompt('Your name?') });
-		socket.on('news', function (data) {
-			console.log(data);
-			$('#serverMessages').html($('#serverMessages').html() + '<p>server: ' + data.message + '</p>');
-		});
-		socket.on('broadcast', function (data) {
-			console.log(data);
-			$('#serverMessages').html($('#serverMessages').html() + '<p>' + data.name + ': ' + data.action + '</p>');
-		});
-	</script>
-	<script>
-		function display(key) {
-			//$('#localMessages').html($('#localMessages').html() + '<p>keyup: ' + key + '</p>');
-			socket.emit('action', { action: key });
-		}
-		$('body').keyup(function (e) {
-			var code = e.keyCode || e.which;
-			// display(code);
-			switch (code) {
-				case 32:
-					display('b');
-					break;
-				case 37:
-					display('l');
-					break;
-				case 38:
-					display('u');
-					break;
-				case 39:
-					display('r');
-					break;
-				case 40:
-					display('d');
-					break;
-			}
-		});
-	</script>
+	<script src="/js/bomberman.js"></script>
+	<script src="/js/bomberman-ui.js"></script>
 </body>
 </html>
