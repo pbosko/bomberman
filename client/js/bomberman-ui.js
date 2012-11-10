@@ -23,18 +23,23 @@ bp.bomberman.ui = (function() {
 				var code = e.keyCode || e.which;
 				switch (code) {
 				case 32:
+					e.preventDefault();
 					bp.bomberman.game.doAction('b');
 					break;
 				case 37:
+					e.preventDefault();
 					bp.bomberman.game.doAction('l');
 					break;
 				case 38:
+					e.preventDefault();
 					bp.bomberman.game.doAction('u');
 					break;
 				case 39:
+					e.preventDefault();
 					bp.bomberman.game.doAction('r');
 					break;
 				case 40:
+					e.preventDefault();
 					bp.bomberman.game.doAction('d');
 					break;
 				}

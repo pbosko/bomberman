@@ -20,7 +20,7 @@ bp.bomberman.game = (function () {
 		remove: function (object, x, y) {
 			var i, pos = -1;
 			for (i = 0; i < this.fields[x][y].length; i+= 1) {
-				if (this.fields[x][y][i].id === object.id) {
+				if (this.fields[x][y][i].id === object.id && this.fields[x][y][i].type === object.type) {
 					pos = i;
 					break;
 				}
@@ -45,8 +45,9 @@ bp.bomberman.game = (function () {
 		this.fieldsY = 10;
 		this.socket = io.connect('http://bomberman.dev:2000');
 		this.socket.on('news', function (data) { me.serverMessage(data); });
-		this.socket.on('playerAction', function (data) { me.playerAction(data); });
 		this.socket.on('start', function (data) { me.gameStart(data); });
+		this.socket.on('playerAction', function (data) { me.playerAction(data); });
+		this.socket.on('bomb', function (data) { me.newBomb(data); });
 		this.table = new Table(this.fieldsX, this.fieldsY);
 	}
 	
@@ -58,16 +59,25 @@ bp.bomberman.game = (function () {
 			$('#serverMessages').html($('#serverMessages').html() + '<p>server: ' + data.message + '</p>');
 		},
 		playerAction: function (data) {
-			var top, player = data.player;
+			var top, player = data.player, cssClass;
 			if (this.history[player.id]) {
 				this.table.remove(player, this.history[player.id].x, this.history[player.id].y);
 				$('#field_' + this.history[player.id].x + '_' + this.history[player.id].y).removeClass();
 				top = this.table.top(this.history[player.id].x, this.history[player.id].y);
 				if (top) {
-					$('#field_' + top.x + '_' + top.y).addClass('color' + top.color);
+					if (top.type == 'player') {
+						cssClass = 'color' + top.color;
+					} else {
+						cssClass = 'bomb';
+					}
+					$('#field_' + top.x + '_' + top.y).addClass(cssClass);
 				}
 			}
 			this.placePlayer(player);
+		},
+		newBomb: function (bomb) {
+			$('#field_' + bomb.x + '_' + bomb.y).removeClass().addClass('bomb');
+			this.table.add(bomb, bomb.x, bomb.y);
 		},
 		gameStart: function (data) {
 			var i, players = data.players;

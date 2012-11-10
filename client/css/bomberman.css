@@ -50,3 +50,7 @@
 .color6 {
 	background-color: lime;
 }
+
+.bomb {
+	background-image: url('/images/bomb.jpg');
+}
