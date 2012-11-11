@@ -41,8 +41,8 @@ bp.bomberman.game = (function () {
 	function Bomberman() {
 		var me = this;
 		this.history = {};
-		this.fieldsX = 15; // TODO: get this values on connect
-		this.fieldsY = 10;
+		this.fieldsX = 13; // TODO: get this values on connect
+		this.fieldsY = 11;
 		this.socket = io.connect('http://bomberman.dev:2000');
 		this.socket.on('news', function (data) { me.serverMessage(data); });
 		this.socket.on('start', function (data) { me.gameStart(data); });
@@ -80,9 +80,12 @@ bp.bomberman.game = (function () {
 			this.table.add(bomb, bomb.x, bomb.y);
 		},
 		gameStart: function (data) {
-			var i, players = data.players;
+			var i, players = data.players, map = data.map;
 			for (i = 0; i < players.length; i += 1) {
 				this.placePlayer(players[i]);
+			}
+			for (i = 0; i < map.length; i += 1) {
+				$('#field_' + map[i].x + '_' + map[i].y).addClass('wall');
 			}
 		},
 		placePlayer: function (player) {
