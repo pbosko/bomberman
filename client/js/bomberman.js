@@ -48,6 +48,8 @@ bp.bomberman.game = (function () {
 		this.socket.on('start', function (data) { me.gameStart(data); });
 		this.socket.on('playerAction', function (data) { me.playerAction(data); });
 		this.socket.on('bomb', function (data) { me.newBomb(data); });
+		this.socket.on('explosion', function (data) { me.explosion(data); });
+		this.socket.on('extinguish', function (data) { me.extinguish(data); });
 		this.table = new Table(this.fieldsX, this.fieldsY);
 	}
 	
@@ -79,13 +81,22 @@ bp.bomberman.game = (function () {
 			$('#field_' + bomb.x + '_' + bomb.y).removeClass().addClass('bomb');
 			this.table.add(bomb, bomb.x, bomb.y);
 		},
+		explosion: function (data) {
+			$('#field_' + data.x + '_' + data.y).removeClass().addClass('cross');
+		},
+		extinguish: function (data) {
+			this.table.remove(data, data.x, data.y);
+			$('#field_' + data.x + '_' + data.y).removeClass();
+		},
 		gameStart: function (data) {
 			var i, players = data.players, map = data.map;
 			for (i = 0; i < players.length; i += 1) {
 				this.placePlayer(players[i]);
 			}
 			for (i = 0; i < map.length; i += 1) {
-				$('#field_' + map[i].x + '_' + map[i].y).addClass('wall');
+				if (map[i].t === 'w') {
+					$('#field_' + map[i].x + '_' + map[i].y).addClass('wall');
+				}
 			}
 		},
 		placePlayer: function (player) {

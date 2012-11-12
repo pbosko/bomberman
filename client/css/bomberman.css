@@ -55,6 +55,10 @@
 	background-image: url('/images/bomb.jpg');
 }
 
+.cross {
+	background-image: url('/images/cross.jpg');
+}
+
 .wall {
 	background-color: grey;
 }

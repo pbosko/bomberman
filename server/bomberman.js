@@ -8,7 +8,7 @@ server.listen(2000);
 var settings = {
 	fieldsX: 13,
 	fieldsY: 11,
-	bombDelay: 5,
+	bombDelay: 4,
 	bombDuration: 2
 };
 
@@ -83,6 +83,18 @@ Table.prototype = {
 	},
 	add: function (object, x, y) {
 		this.fields[x][y].add(object);
+	},
+	remove: function (object, x, y) {
+		var i, pos = -1;
+		for (i = 0; i < this.fields[x][y].objects.length; i+= 1) {
+			if (this.fields[x][y].objects[i].id === object.id && this.fields[x][y].objects[i].type === object.type) {
+				pos = i;
+				break;
+			}
+		}
+		if (pos > -1) {
+			this.fields[x][y].objects.splice(pos, 1);
+		}
 	}
 };
 
@@ -140,7 +152,15 @@ Game.prototype = {
 		return bomb;
 	},
 	explosion: function (bomb) {
+		var me = this;
 		console.log('Bomb ' + bomb.id + ' exploded.');
+		io.sockets.emit('explosion', bomb);
+		setTimeout(function () { me.extinguish(bomb); }, this.settings.bombDuration * 1000);
+	},
+	extinguish: function (bomb) {
+		this.table.remove(bomb, bomb.x, bomb.y);
+		io.sockets.emit('extinguish', bomb);
+		console.log('Bomb ' + bomb.id + ' extinguished.');
 	},
 	playerAction: function (socket, data) {
 		switch (data.action) {
